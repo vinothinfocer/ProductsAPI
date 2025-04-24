@@ -1,16 +1,18 @@
 package com.api.products.controller;
 
-import com.api.products.entity.Tags;
+import com.api.products.Service.ProductService;
+import com.api.products.dto.ProductDto;
+import com.api.products.entity.Product;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import org.apache.tomcat.util.json.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -24,12 +26,21 @@ import java.util.Set;
 @RestController
 public class ProductController {
 
+    @Autowired
+    private ProductService productService;
+
     private static final String url = "https://dummyjson.com/products";
 
     @GetMapping("/products")
     public ResponseEntity<Void> getProducts() {
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @PostMapping("/products")
+    public ResponseEntity<ProductDto> postProduct(@RequestBody ProductDto ProductDto) {
+        ProductDto dto = productService.addProduct(ProductDto);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @GetMapping("topPriceProduct")
